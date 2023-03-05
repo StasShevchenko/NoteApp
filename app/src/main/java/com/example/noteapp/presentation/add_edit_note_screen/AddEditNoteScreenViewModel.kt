@@ -1,5 +1,6 @@
 package com.example.noteapp.presentation.add_edit_note_screen
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,7 +30,10 @@ class AddEditNoteScreenViewModel @Inject constructor(
 
     private var noteTitle = ""
     private var noteContent = ""
-    private var isPinned = false
+
+    var isPinned = false
+        private set
+
     init {
         currentNoteId = savedStateHandle.get<Long>("noteId")!!
         if (currentNoteId != -1L) {
@@ -46,13 +50,16 @@ class AddEditNoteScreenViewModel @Inject constructor(
         this.noteTitle = noteTitle
     }
 
-    fun enterNoteContent(noteContent: String){
+    fun enterNoteContent(noteContent: String) {
         this.noteContent = noteContent
     }
 
-    fun onBackPressed(){
+    fun onBackPressed() {
         if (noteContent.isNotEmpty()) {
             viewModelScope.launch {
+                if (currentNoteId == -1L) {
+                    currentNoteId = 0
+                }
                 dao.insertNote(
                     Note(
                         noteId = currentNoteId,
@@ -63,7 +70,7 @@ class AddEditNoteScreenViewModel @Inject constructor(
                 )
                 _eventFlow.emit(UiEvent.NoteSaved)
             }
-        } else{
+        } else {
             viewModelScope.launch {
                 _eventFlow.emit(UiEvent.NoteSaved)
             }
@@ -74,7 +81,7 @@ class AddEditNoteScreenViewModel @Inject constructor(
         isPinned = !isPinned
     }
 
-    sealed class UiEvent{
+    sealed class UiEvent {
         object NoteSaved : UiEvent()
     }
 }
