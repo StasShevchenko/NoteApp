@@ -40,6 +40,9 @@ class AddEditNoteScreenFragment : Fragment(R.layout.add_edit_note_screen_fragmen
         filledPinIcon.alpha = 255
         val outlinedPinIcon = resources.getDrawable(R.drawable.ic_outlined_pin)
         binding.topAppBar.menu.getItem(0).icon = outlinedPinIcon
+        binding.topAppBar.setNavigationOnClickListener {
+            viewModel.onBackPressed()
+        }
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.pin -> {
