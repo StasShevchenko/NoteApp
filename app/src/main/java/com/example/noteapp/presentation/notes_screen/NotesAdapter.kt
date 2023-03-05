@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.noteapp.data.model.Note
 import com.example.noteapp.databinding.NoteItemBinding
 
-class NotesAdapter() : ListAdapter<Note, NotesAdapter.NoteViewHolder>(NotesComparator()) {
-
+class NotesAdapter(
+    private val clickListener: OnNoteClickListener
+) : ListAdapter<Note, NotesAdapter.NoteViewHolder>(NotesComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesAdapter.NoteViewHolder {
         val binding =
@@ -29,6 +30,18 @@ class NotesAdapter() : ListAdapter<Note, NotesAdapter.NoteViewHolder>(NotesCompa
 
     inner class NoteViewHolder(private val binding: NoteItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = absoluteAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val currentItem = getItem(position)
+                    if (currentItem != null) {
+                        clickListener.onNoteClick(currentItem)
+                    }
+                }
+            }
+        }
         @SuppressLint("SetTextI18n")
         fun bind(note: Note){
             binding.apply {
@@ -51,5 +64,9 @@ class NotesAdapter() : ListAdapter<Note, NotesAdapter.NoteViewHolder>(NotesCompa
         override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
             return oldItem == newItem
         }
+    }
+
+    interface OnNoteClickListener{
+        fun onNoteClick(note: Note)
     }
 }

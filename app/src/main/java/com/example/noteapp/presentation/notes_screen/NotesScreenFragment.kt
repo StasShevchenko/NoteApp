@@ -10,6 +10,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteapp.R
+import com.example.noteapp.data.model.Note
 import com.example.noteapp.databinding.NotesScreenFragmentBinding
 import com.example.noteapp.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,14 +18,15 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivity.FabButtonClick {
+class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivity.FabButtonClick,
+    NotesAdapter.OnNoteClickListener {
     private val viewModel: NotesScreenViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).setFabListener(this)
         val binding: NotesScreenFragmentBinding = NotesScreenFragmentBinding.bind(view)
-        val notesAdapter = NotesAdapter()
+        val notesAdapter = NotesAdapter(this)
         binding.apply {
             notesRecyclerView.apply {
                 adapter = notesAdapter
@@ -45,6 +47,12 @@ class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivi
     override fun onFabClicked() {
         val action =
             NotesScreenFragmentDirections.actionNotesScreenFragmentToAddEditNoteScreenFragment()
+        findNavController().navigate(action)
+    }
+
+    override fun onNoteClick(note: Note) {
+        val action =
+            NotesScreenFragmentDirections.actionNotesScreenFragmentToAddEditNoteScreenFragment(note.noteId)
         findNavController().navigate(action)
     }
 }

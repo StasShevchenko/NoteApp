@@ -21,8 +21,8 @@
         tools:layout="@layout/add_edit_note_screen_fragment">
         <argument
             android:name="noteId"
-            android:defaultValue="-1"
-            app:argType="integer" />
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
 
 
