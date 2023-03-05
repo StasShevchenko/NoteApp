@@ -9,5 +9,21 @@
         android:id="@+id/notesScreenFragment"
         android:name="com.example.noteapp.presentation.notes_screen.NotesScreenFragment"
         android:label="Заметки"
-        tools:layout="@layout/notes_screen_fragment" />
+        tools:layout="@layout/notes_screen_fragment">
+        <action
+            android:id="@+id/action_notesScreenFragment_to_addEditNoteScreenFragment"
+            app:destination="@id/addEditNoteScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditNoteScreenFragment"
+        android:label=""
+        android:name="com.example.noteapp.presentation.add_edit_note_screen.AddEditNoteScreenFragment"
+        tools:layout="@layout/add_edit_note_screen_fragment">
+        <argument
+            android:name="noteId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+
 </navigation>
