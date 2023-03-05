@@ -5,9 +5,13 @@
     tools:context=".presentation.notes_screen.NotesScreenFragment"
     android:layout_height="match_parent">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notesRecyclerView"
         android:layout_width="match_parent"
-        android:text="Заметки"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        tools:listitem="@layout/note_item"
+        tools:itemCount="5"
+        android:orientation="vertical"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
