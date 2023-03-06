@@ -20,7 +20,8 @@ class AddEditNoteScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var currentNoteId: Long = -1
+    var currentNoteId: Long = -1
+        private set
 
     private val _currentNote: MutableStateFlow<Note?> = MutableStateFlow(null)
     val currentNote: StateFlow<Note?> = _currentNote

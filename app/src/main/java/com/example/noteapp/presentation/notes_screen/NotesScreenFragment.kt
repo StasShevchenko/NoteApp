@@ -13,6 +13,7 @@ import com.example.noteapp.R
 import com.example.noteapp.data.model.Note
 import com.example.noteapp.databinding.NotesScreenFragmentBinding
 import com.example.noteapp.presentation.MainActivity
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -26,6 +27,30 @@ class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivi
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).setFabListener(this)
         val binding: NotesScreenFragmentBinding = NotesScreenFragmentBinding.bind(view)
+
+        val deletedNote =
+            findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>("noteId")
+        deletedNote?.observe(viewLifecycleOwner) { deletedNoteId ->
+            deletedNoteId?.let {
+                viewModel.hideNote(deletedNoteId)
+                val snackbar =
+                    Snackbar.make(requireView(), "Заметка была удалена!", Snackbar.LENGTH_SHORT)
+                snackbar.setAction("Отменить") {
+                    viewModel.restoreNote()
+                }
+                snackbar.addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        if (event != DISMISS_EVENT_ACTION) {
+                            viewModel.deleteNote(deletedNoteId)
+                        }
+                    }
+                })
+                snackbar.show()
+                findNavController().currentBackStackEntry?.savedStateHandle?.set<Long>("noteId", null)
+            }
+        }
+
+
         val notesAdapter = NotesAdapter(this)
         binding.apply {
             notesRecyclerView.apply {

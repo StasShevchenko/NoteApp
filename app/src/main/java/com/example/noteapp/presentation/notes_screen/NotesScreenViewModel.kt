@@ -17,6 +17,28 @@ class NotesScreenViewModel @Inject constructor(
     private val dao: NotesDao
 ) : ViewModel() {
 
+    private var deletedNote: Note? = null
+    fun deleteNote(deletedNoteId: Long) {
+        viewModelScope.launch {
+            dao.deleteNoteById(deletedNoteId)
+        }
+    }
+
+    fun restoreNote() {
+        val restoredNoteList = _notes.value.toMutableList()
+        restoredNoteList.add(deletedNote!!)
+        _notes.value = restoredNoteList
+    }
+
+    fun hideNote(deletedNoteId: Long){
+        val deletedNoteList = _notes.value.toMutableList()
+        deletedNote = deletedNoteList.find {
+            it.noteId == deletedNoteId
+        }
+        deletedNoteList.remove(deletedNote)
+        _notes.value = deletedNoteList
+    }
+
     private val _notes: MutableStateFlow<List<Note>> = MutableStateFlow(emptyList())
     val notes: StateFlow<List<Note>> = _notes
 

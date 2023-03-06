@@ -20,6 +20,9 @@ interface NotesDao {
     @Delete
     suspend fun deleteNote(note: Note)
 
+    @Query("DELETE FROM note WHERE noteId = :noteId")
+    suspend fun deleteNoteById(noteId: Long)
+
     @Query("SELECT * FROM note WHERE noteTitle LIKE '%' || :searchQuery || '%' OR" +
             " noteContent LIKE '%' || :searchQuery || '%' ORDER BY isPinned DESC, dateCreated DESC")
     fun getNotesBySearchQuery(searchQuery: String): Flow<List<Note>>

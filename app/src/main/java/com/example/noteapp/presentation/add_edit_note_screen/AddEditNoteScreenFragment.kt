@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 class AddEditNoteScreenFragment : Fragment(R.layout.add_edit_note_screen_fragment) {
     private val viewModel: AddEditNoteScreenViewModel by viewModels()
     private lateinit var menu: Menu
+
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,12 +50,19 @@ class AddEditNoteScreenFragment : Fragment(R.layout.add_edit_note_screen_fragmen
                     viewModel.pinNote()
                     if (viewModel.isPinned) {
                         binding.topAppBar.menu.getItem(0).icon = filledPinIcon
-                    } else{
+                    } else {
                         binding.topAppBar.menu.getItem(0).icon = outlinedPinIcon
                     }
                     true
                 }
-                R.id.delete ->{
+                R.id.delete -> {
+                    if (viewModel.currentNoteId != -1L) {
+                        navController.previousBackStackEntry?.savedStateHandle?.set(
+                            "noteId",
+                            viewModel.currentNoteId
+                        )
+                        navController.popBackStack()
+                    }
                     true
                 }
                 else -> {
@@ -79,7 +87,7 @@ class AddEditNoteScreenFragment : Fragment(R.layout.add_edit_note_screen_fragmen
                         binding.contentEditText.setText(note.noteContent)
                         if (note.isPinned) {
                             binding.topAppBar.menu.getItem(0).icon = filledPinIcon
-                        } else{
+                        } else {
                             binding.topAppBar.menu.getItem(0).icon = outlinedPinIcon
                         }
                     }
@@ -99,7 +107,6 @@ class AddEditNoteScreenFragment : Fragment(R.layout.add_edit_note_screen_fragmen
             viewModel.onBackPressed()
         }
     }
-
 
 
 }
