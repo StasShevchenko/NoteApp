@@ -1,6 +1,7 @@
 package com.example.noteapp.presentation.notes_screen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -55,6 +56,7 @@ class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivi
                     }
                 })
                 snackbar.show()
+                deletedNote.removeObservers(viewLifecycleOwner)
                 navController.currentBackStackEntry?.savedStateHandle?.set<Long>("noteId", null)
             }
         }
@@ -81,7 +83,10 @@ class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivi
                 searchImageButton.visibility = View.VISIBLE
             }
             searchEditText.addTextChangedListener {text ->
-                viewModel.searchNotes(text.toString())
+                if (searchEditText.hasFocus()) {
+                    viewModel.searchNotes(text.toString())
+
+                }
             }
         }
 
