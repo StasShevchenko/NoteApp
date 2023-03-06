@@ -59,15 +59,25 @@ class AddEditNoteScreenViewModel @Inject constructor(
             viewModelScope.launch {
                 if (currentNoteId == -1L) {
                     currentNoteId = 0
-                }
-                dao.insertNote(
-                    Note(
-                        noteId = currentNoteId,
-                        noteTitle = noteTitle,
-                        noteContent = noteContent,
-                        isPinned = isPinned
+                    dao.insertNote(
+                        Note(
+                            noteId = currentNoteId,
+                            noteTitle = noteTitle,
+                            noteContent = noteContent,
+                            isPinned = isPinned
+                        )
                     )
-                )
+                } else {
+                    dao.insertNote(
+                        Note(
+                            noteId = currentNoteId,
+                            noteTitle = noteTitle,
+                            noteContent = noteContent,
+                            isPinned = isPinned,
+                            dateCreated = currentNote.value!!.dateCreated
+                        )
+                    )
+                }
                 _eventFlow.emit(UiEvent.NoteSaved)
             }
         } else {
