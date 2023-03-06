@@ -22,6 +22,7 @@ object AppModule {
             NotesDatabase::class.java,
             NotesDatabase.DATABASE_NAME
         )
+            .createFromAsset("note_app_db.db")
             .build()
     }
 
