@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:inputType="textCapSentences"
             android:background="@android:color/transparent"
             android:hint="Заголовок"
             android:textSize="24sp"
@@ -39,8 +40,10 @@
         <EditText
             android:id="@+id/contentEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="8dp"
+            android:inputType="textCapSentences"
+            android:gravity="top"
             android:background="@android:color/transparent"
             android:hint="Заметка"
             tools:ignore="TouchTargetSizeCheck" />

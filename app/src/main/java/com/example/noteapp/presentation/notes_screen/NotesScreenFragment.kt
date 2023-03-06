@@ -27,11 +27,12 @@ import kotlinx.coroutines.launch
 class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivity.FabButtonClick,
     NotesAdapter.OnNoteClickListener {
     private val viewModel: NotesScreenViewModel by viewModels()
+    private lateinit var binding: NotesScreenFragmentBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).setFabListener(this)
-        val binding: NotesScreenFragmentBinding = NotesScreenFragmentBinding.bind(view)
+         binding = NotesScreenFragmentBinding.bind(view)
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.topAppBar.setupWithNavController(navController, appBarConfiguration)
@@ -97,12 +98,14 @@ class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivi
 
 
     override fun onFabClicked() {
+        binding.toolbarTitle.visibility = View.GONE
         val action =
             NotesScreenFragmentDirections.actionNotesScreenFragmentToAddEditNoteScreenFragment()
         findNavController().navigate(action)
     }
 
     override fun onNoteClick(note: Note) {
+        binding.toolbarTitle.visibility = View.GONE
         val action =
             NotesScreenFragmentDirections.actionNotesScreenFragmentToAddEditNoteScreenFragment(note.noteId)
         findNavController().navigate(action)
