@@ -6,6 +6,7 @@ import com.example.noteapp.data.data_source.NotesDao
 import com.example.noteapp.data.model.Note
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -21,6 +22,15 @@ class NotesScreenViewModel @Inject constructor(
     fun deleteNote(deletedNoteId: Long) {
         viewModelScope.launch {
             dao.deleteNoteById(deletedNoteId)
+        }
+    }
+
+    fun searchNotes(searchQuery: String){
+        job?.cancel()
+        job = viewModelScope.launch {
+            dao.getNotesBySearchQuery(searchQuery).collectLatest { notes ->
+                _notes.value = notes
+            }
         }
     }
 

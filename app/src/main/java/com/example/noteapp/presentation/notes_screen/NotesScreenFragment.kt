@@ -1,13 +1,18 @@
 package com.example.noteapp.presentation.notes_screen
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteapp.R
 import com.example.noteapp.data.model.Note
@@ -27,9 +32,12 @@ class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivi
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).setFabListener(this)
         val binding: NotesScreenFragmentBinding = NotesScreenFragmentBinding.bind(view)
-
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        binding.topAppBar.setupWithNavController(navController, appBarConfiguration)
+        binding.topAppBar
         val deletedNote =
-            findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Long>("noteId")
+            navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Long>("noteId")
         deletedNote?.observe(viewLifecycleOwner) { deletedNoteId ->
             deletedNoteId?.let {
                 viewModel.hideNote(deletedNoteId)
@@ -46,7 +54,7 @@ class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivi
                     }
                 })
                 snackbar.show()
-                findNavController().currentBackStackEntry?.savedStateHandle?.set<Long>("noteId", null)
+                navController.currentBackStackEntry?.savedStateHandle?.set<Long>("noteId", null)
             }
         }
 
@@ -58,6 +66,22 @@ class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivi
                 layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
+            searchImageButton.setOnClickListener {
+                toolbarTitle.visibility = View.GONE
+                backImageButton.visibility = View.VISIBLE
+                searchEditText.visibility = View.VISIBLE
+                searchImageButton.visibility = View.GONE
+            }
+            backImageButton.setOnClickListener {
+                toolbarTitle.visibility = View.VISIBLE
+                backImageButton.visibility = View.GONE
+                searchEditText.visibility = View.GONE
+                viewModel.searchNotes("")
+                searchImageButton.visibility = View.VISIBLE
+            }
+            searchEditText.addTextChangedListener {text ->
+                viewModel.searchNotes(text.toString())
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -68,6 +92,9 @@ class NotesScreenFragment : Fragment(R.layout.notes_screen_fragment), MainActivi
             }
         }
     }
+
+
+
 
     override fun onFabClicked() {
         val action =
