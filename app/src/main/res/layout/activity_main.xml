@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
     tools:context=".presentation.MainActivity">
 
@@ -19,6 +20,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
+        app:borderWidth="1dp"
+        android:backgroundTint="@color/white"
+        android:tint="@color/white"
+        app:backgroundTint="@color/black"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add" />
 
