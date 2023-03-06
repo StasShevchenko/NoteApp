@@ -3,7 +3,7 @@
 Позволяет создавать заметки, осуществлять поиск по заметкам, а также закреплять их.
 
 
-[Скачать установочный файл](https://drive.google.com/uc?id=1vGE1vJ0Hfjvnenr141wAIdondQsCZHY9&export=download)
+[Скачать установочный файл](https://drive.google.com/file/d/1vGE1vJ0Hfjvnenr141wAIdondQsCZHY9/view?usp=sharing)
 ## Скриншоты
 <p align='center'>
   <img src='https://user-images.githubusercontent.com/79803411/223120307-23c76e9d-5764-46d0-91f9-30a086cebec8.png' width='30%'/>
